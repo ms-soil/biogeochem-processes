@@ -3,33 +3,73 @@ Oil palm decomposition
 Marcus Schmidt
 8 November 2019
 
-R Markdown
-----------
+### Background
 
-test
-====
+This study was done on oil-palm plantations in Indonesia on two differen soil types.
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+### The code
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Let's fist load our library. It is the tidyverse library, which includes useful tools for data handling and visualization, i.e. the ggplot 2 package.
 
 ``` r
-summary(cars)
+library("tidyverse")
 ```
 
-    ##      speed           dist       
-    ##  Min.   : 4.0   Min.   :  2.00  
-    ##  1st Qu.:12.0   1st Qu.: 26.00  
-    ##  Median :15.0   Median : 36.00  
-    ##  Mean   :15.4   Mean   : 42.98  
-    ##  3rd Qu.:19.0   3rd Qu.: 56.00  
-    ##  Max.   :25.0   Max.   :120.00
+Next, I am going to load my data from the .txt file I created and look at the first 5 observations too see what's going on:
 
-Including Plots
----------------
+``` r
+DATA=read.table("data/schmidt-nut-data.txt",h=T)
+head(DATA)
+```
 
-You can also embed plots, for example:
+You may also want to try
 
-![](report-oilpalm_files/figure-markdown_github/pressure-1.png)
+``` r
+View(DATA)
+```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+to see the whole data set.
+
+We now want to look at the first soil type (Clay Acrisol) at the first site, so we create a subset like this, using the pipe (%&gt;%) from the tidyverse package. Then we check if this really worked.
+
+``` r
+DATA<-DATA%>%filter(Plot == "C1")
+unique(DATA$Plot)
+```
+
+    ## [1] C1
+    ## Levels: C1 C2 L1 L2
+
+The next part is key! We are plotting our Data - days and mass, fit an exponential cuve and retrieve k, our decomposition rate:
+
+``` r
+xx <- seq(0,605, length=1500)
+plot(DATA$Mass_g 
+     ~ DATA$d)
+y <- DATA$Mass_g
+x <- DATA$d
+fit <- nls(y ~ (50.81 * 2.718^(-k * x)), start=list(k=0.00001))
+lines(xx, predict(fit, data.frame(x=xx)), col="red", lwd=2, lty=1)
+```
+
+![](report-oilpalm_files/figure-markdown_github/fitting-and-plotting-1.png)
+
+``` r
+summary(fit)
+```
+
+    ## 
+    ## Formula: y ~ (50.81 * 2.718^(-k * x))
+    ## 
+    ## Parameters:
+    ##    Estimate Std. Error t value Pr(>|t|)    
+    ## k 0.0052707  0.0001223    43.1   <2e-16 ***
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 2.582 on 51 degrees of freedom
+    ## 
+    ## Number of iterations to convergence: 6 
+    ## Achieved convergence tolerance: 5.804e-07
+
+In the output above, we are given the k and some information on how well it fits the observed data.
