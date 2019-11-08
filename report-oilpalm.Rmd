@@ -1,0 +1,36 @@
+---
+title: "Oil palm decomposition"
+author: "Marcus Schmidt"
+date: "8 November 2019"
+output: github_document
+---
+
+### Background
+This study was done on oil-palm plantations in Indonesia on two differen soil types.
+
+### The code
+Let's fist load our library. It is the tidyverse library, which includes useful tools for data handling and visualization, i.e. the ggplot 2 package.
+
+```{r libraries, echo = T}
+library("tidyverse")
+```
+
+
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
