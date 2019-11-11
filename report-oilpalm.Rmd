@@ -1,20 +1,92 @@
 ---
-title: "Oil palm decomposition"
+title: "Oil palm SOC and leaf litter decomposition"
 author: "Marcus Schmidt"
 date: "8 November 2019"
 output: github_document
 ---
 
 ### Background
-This study was done on oil-palm plantations in Indonesia on two differen soil types.
+In the following course, we are looking at two processes in oil palm plantations:
+1) Soil organic Carbon (SOC) remaining after deforestation
+2) Decomposition of oil palm leafs
 
-### The code
+### Part 1 - SOC remaining
+This data is part of a study on deforestation and land luse conversion in Indonesia, Cameroon and Peru. You can find the whole paper here: https://www.pnas.org/content/112/32/9956
+
 Let's fist load our library. It is the tidyverse library, which includes useful tools for data handling and visualization, i.e. the ggplot 2 package.
 ```{r libraries, echo = T, results='hide', message=F, warning=F}
 library("tidyverse")
 ```
 
-Next, I am going to load my data from the .txt file I created and look at the first 5 observations too see what's going on:
+Let's now read in our data and look at the upper part:
+
+```{r data-read-in, echo = T, results = 'hide'}
+DATA=read.csv("data/van-straaten-soc.csv",h=T)
+head(DATA)
+```
+
+I like to shorten our variables a little bit, it will be easier to type then:
+
+```{r shortening, echo = T}
+DATA$t<-DATA$Time.since.Deforestation
+DATA$soc_pc<-DATA$SOC_prop_top10_C2
+```
+
+Next, I apply a filter to exclude observations without country, only oil palm and clay content doesn't change more than 20%.
+
+```{r filtering, echo = T}
+DATA<-DATA%>%filter(Country!="")%>%filter(Landuse == "Oil palm")
+DATA<-DATA%>%filter(abs(d_Clay_50to100)<20)
+```
+
+Now, for some of the following coding, it's easier to give a shorter name to some variables. We choose x and y because this we will have on our axes:
+
+```{r shortening-variables, echo = T}
+y <- DATA$soc_pc #
+x <- DATA$t
+```
+
+Let's plot this in a very basic form, do the fitting and then add the line:
+```{r basic-plot, echo = T}
+xx <- seq(0,605, length=1500)
+plot(y~x)
+
+fit2=nls(y~a+(100-a)*exp(-k*x),start=list(a=60, k=0.15), algorithm="port")
+
+lines(xx, predict(fit2, data.frame(x=xx)), col="red", lwd=2, lty=1)
+summary(fit2)
+```
+
+The plot will look much nicer in ggplot2, however:
+```{r nicer-plotting, echo = T}
+g2 <- ggplot(DATA,aes(t,soc_pc, shape = Country, colour = Country)) +
+    geom_hline(yintercept=100) +
+  xlim(0,50) +
+  ylim(0,150) +
+  geom_point(show.legend = T, size = 3) +
+  ggtitle("Change in organic carbon") +
+  xlab("Years since deforestation") +
+  ylab("Percent carbon remaining") +
+  theme_bw()
+g2
+```
+
+
+Finally, we will add the curve to our ggplot:
+```{r final plotting, echo = T}
+func3<- function(x) {60.4+(100-60.4)*exp(-0.1296*x)}
+
+g2 +
+  stat_function(fun = func3, xlim=c(0,400), col = "blue", size = 1) 
+```
+
+
+
+
+### Part 2 - Decomposition
+This data was collected in Indonesia where oil palm leafs are put in between oil palm rows and left there to decompose.
+
+I am first going to load my data from the .txt file I created and look at the first 5 observations too see what's going on:
 ```{r data-loading, echo = T, results = 'hide'}
 DATA=read.table("data/schmidt-nut-data.txt",h=T)
 head(DATA)
@@ -28,7 +100,7 @@ to see the whole data set.
 
 We now want to look at the first soil type (Clay Acrisol) at the first site, so we create a subset like this, using the pipe (%>%) from the tidyverse package. Then we check if this really worked.
 
-```{r filtering, echo = T}
+```{r filtering-2, echo = T}
 DATA<-DATA%>%filter(Plot == "C1")
 unique(DATA$Plot)
 ```
@@ -80,7 +152,8 @@ g1 <- ggplot(dat1,aes(x,y)) +
   ggtitle("Leaf mass decline on Clay Aricsol 1") +
   xlab("days") +
   ylab("remaining mass in g") +
-  stat_function(fun = func1, xlim=c(0,400), col = "red")
+  stat_function(fun = func1, xlim=c(0,400), col = "red") +
+  theme_bw()
 g1
 ```
 

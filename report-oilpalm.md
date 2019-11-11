@@ -1,13 +1,15 @@
-Oil palm decomposition
+Oil palm SOC and leaf litter decomposition
 ================
 Marcus Schmidt
 8 November 2019
 
 ### Background
 
-This study was done on oil-palm plantations in Indonesia on two differen soil types.
+In the following course, we are looking at two processes in oil palm plantations: 1) Soil organic Carbon (SOC) remaining after deforestation 2) Decomposition of oil palm leafs
 
-### The code
+### Part 1 - SOC remaining
+
+This data is part of a study on deforestation and land luse conversion in Indonesia, Cameroon and Peru. You can find the whole paper here: <https://www.pnas.org/content/112/32/9956>
 
 Let's fist load our library. It is the tidyverse library, which includes useful tools for data handling and visualization, i.e. the ggplot 2 package.
 
@@ -15,7 +17,105 @@ Let's fist load our library. It is the tidyverse library, which includes useful 
 library("tidyverse")
 ```
 
-Next, I am going to load my data from the .txt file I created and look at the first 5 observations too see what's going on:
+Let's now read in our data and look at the upper part:
+
+``` r
+DATA=read.csv("data/van-straaten-soc.csv",h=T)
+head(DATA)
+```
+
+I like to shorten our variables a little bit, it will be easier to type then:
+
+``` r
+DATA$t<-DATA$Time.since.Deforestation
+DATA$soc_pc<-DATA$SOC_prop_top10_C2
+```
+
+Next, I apply a filter to exclude observations without country, only oil palm and clay content doesn't change more than 20%.
+
+``` r
+DATA<-DATA%>%filter(Country!="")%>%filter(Landuse == "Oil palm")
+DATA<-DATA%>%filter(abs(d_Clay_50to100)<20)
+```
+
+Now, for some of the following coding, it's easier to give a shorter name to some variables. We choose x and y because this we will have on our axes:
+
+``` r
+y <- DATA$soc_pc #
+x <- DATA$t
+```
+
+Let's plot this in a very basic form, do the fitting and then add the line:
+
+``` r
+xx <- seq(0,605, length=1500)
+plot(y~x)
+
+fit2=nls(y~a+(100-a)*exp(-k*x),start=list(a=60, k=0.15), algorithm="port")
+
+lines(xx, predict(fit2, data.frame(x=xx)), col="red", lwd=2, lty=1)
+```
+
+![](report-oilpalm_files/figure-markdown_github/basic-plot-1.png)
+
+``` r
+summary(fit2)
+```
+
+    ## 
+    ## Formula: y ~ a + (100 - a) * exp(-k * x)
+    ## 
+    ## Parameters:
+    ##   Estimate Std. Error t value Pr(>|t|)    
+    ## a  60.4117     9.9786   6.054 2.21e-05 ***
+    ## k   0.1296     0.1066   1.216    0.243    
+    ## ---
+    ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+    ## 
+    ## Residual standard error: 17.99 on 15 degrees of freedom
+    ## 
+    ## Algorithm "port", convergence message: relative convergence (4)
+    ##   (4 observations deleted due to missingness)
+
+The plot will look much nicer in ggplot2, however:
+
+``` r
+g2 <- ggplot(DATA,aes(t,soc_pc, shape = Country, colour = Country)) +
+    geom_hline(yintercept=100) +
+  xlim(0,50) +
+  ylim(0,150) +
+  geom_point(show.legend = T, size = 3) +
+  ggtitle("Change in organic carbon") +
+  xlab("Years since deforestation") +
+  ylab("Percent carbon remaining") +
+  theme_bw()
+g2
+```
+
+    ## Warning: Removed 4 rows containing missing values (geom_point).
+
+![](report-oilpalm_files/figure-markdown_github/nicer-plotting-1.png)
+
+Finally, we will add the curve to our ggplot:
+
+``` r
+func3<- function(x) {60.4+(100-60.4)*exp(-0.1296*x)}
+
+g2 +
+  stat_function(fun = func3, xlim=c(0,400), col = "blue", size = 1) 
+```
+
+    ## Warning: Removed 4 rows containing missing values (geom_point).
+
+    ## Warning: Removed 264 rows containing missing values (geom_path).
+
+![](report-oilpalm_files/figure-markdown_github/final%20plotting-1.png)
+
+### Part 2 - Decomposition
+
+This data was collected in Indonesia where oil palm leafs are put in between oil palm rows and left there to decompose.
+
+I am first going to load my data from the .txt file I created and look at the first 5 observations too see what's going on:
 
 ``` r
 DATA=read.table("data/schmidt-nut-data.txt",h=T)
