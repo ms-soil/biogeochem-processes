@@ -49,6 +49,7 @@ g1
 
 ggsave("figs/oil-palm-decomp.png", plot = g1, width = 10, height = 10)
 
+
 g1 +
   stat_function(fun = func1, xlim=c(0,400), col = "red") 
 

@@ -48,3 +48,45 @@ summary(fit)
 ```
 
 In the output above, we are given the k and some information on how well it fits the observed data.
+
+We made the plot using the basic plot package in R. However, in order to get a much nicer plot, I recommend using the ggplot 2 package. It's already included in the tidyverse library we installed earlier. 
+
+We first define the functin including k, which we get from above and define what data we want to use:
+
+```{r function-defining, echo = T, }
+func1<- function(x) {50.81 * 2.718^(-0.0052707 * x)}
+dat1 = data.frame(x = DATA$d, y = DATA$Mass_g)
+```
+
+Now we define the plot:
+```{r gg-plot-code, echo = T, results = 'hide', eval = F}
+g1 <- ggplot(dat1,aes(x,y)) +
+  xlim(0,400) +
+  ylim(0,60) +
+  geom_point(show.legend = FALSE) +
+  ggtitle("Leaf mass decline on Clay Aricsol 1") +
+  xlab("days") +
+  ylab("remaining mass in g") +
+  stat_function(fun = func1, xlim=c(0,400), col = "red")
+g1
+```
+
+And this is what we get:
+```{r gg-plot-output, echo = F}
+g1 <- ggplot(dat1,aes(x,y)) +
+  xlim(0,400) +
+  ylim(0,60) +
+  geom_point(show.legend = FALSE) +
+  ggtitle("Leaf mass decline on Clay Aricsol 1") +
+  xlab("days") +
+  ylab("remaining mass in g") +
+  stat_function(fun = func1, xlim=c(0,400), col = "red")
+g1
+```
+
+To save your plot in a folder called figs within your project, we can use the cowplot package.
+```{r saving, echo = T, results = 'hide', message=F, warning=F}
+library(cowplot)
+ggsave("figs/oil-palm-decomp.png", plot = g1, width = 10, height = 10)
+```
+
