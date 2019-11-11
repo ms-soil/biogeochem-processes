@@ -65,6 +65,11 @@ fit <- nls(y ~ (a * x + b), start=list(a=1, b=1))
 lines(xx, predict(fit, data.frame(x=xx)), col="red", lwd=2, lty=1)
 summary(fit)
 
+
+
+
+
+
 #### SOC DECAY ####
 DATA=read.csv("data/van-straaten-soc.csv",h=T)
 #View(DATA)
@@ -73,14 +78,53 @@ head(DATA)
 DATA$t<-DATA$Time.since.Deforestation
 DATA$soc_pc<-DATA$SOC_prop_top10_C2
 
-DATA<-DATA%>%filter(t<50)
-DATA<-DATA%>%group_by(t, Country)%>%summarize(soc_pc_mean = mean(soc_pc))
-DATA
+DATA<-DATA%>%filter(t<50)%>%filter(Country!="")%>%filter(Landuse == "Oil palm")
+DATA<-DATA%>%filter(abs(d_Clay_50to100)<20)
 
-g2 <- ggplot(DATA,aes(t,soc_pc_mean)) +
+y <- DATA$soc_pc #
+x <- DATA$t
+
+plot(y~x)
+
+# from oliver: 
+# fit2=nls(y~a+(b-a)*exp(-k*x),start=list(a=70, b=100, k=0.15), algorithm="port")
+# summary(fit2)
+
+# from oliver, adapted: 
+fit2=nls(y~a+(b-a)*exp(-k*x),start=list(a=70, b=100, k=0.15), algorithm="port")
+summary(fit2)
+
+
+# my try:
+fit3 <- nls(y ~ (100 * 2.718^(-k * x)), start=list(k=0.15))
+fit3 <- nls(y ~ (100 * exp(-k * x)), start=list(k=0.15))
+
+xx <- seq(0,605, length=1500)
+lines(xx, predict(fit3, data.frame(x=xx)), col="red", lwd=2, lty=1)
+summary(fit3)
+
+g2 <- ggplot(DATA,aes(t,soc_pc, shape = Country, colour = Country)) +
+    geom_hline(yintercept=100) +
   xlim(0,50) +
   ylim(0,150) +
-  geom_point(show.legend = FALSE) 
+  geom_point(show.legend = T, size = 3) +
+  ggtitle("Change in organic carbon") +
+  xlab("Years since deforestation") +
+  ylab("Percent carbon remaining") +
+  theme_bw()
 g2
 
-# group by t, give legend to country
+func2<- function(x) {100 * 2.718^(-0.021389 * x)}
+func2
+
+# Oliver ca.
+func3<- function(x) {60+(100-60)*exp(-0.14*x)}
+
+g2 +
+  stat_function(fun = func2, xlim=c(0,400), col = "red", size = 1) +
+  stat_function(fun = func3, xlim=c(0,400), col = "blue", size = 1) 
+
+g2 
+
+  
+
