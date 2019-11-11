@@ -70,7 +70,7 @@ summary(fit)
 
 
 
-#### SOC DECAY ####
+#### SOC DECAY OIL PALM ####
 DATA=read.csv("data/van-straaten-soc.csv",h=T)
 #View(DATA)
 head(DATA)
@@ -85,10 +85,6 @@ y <- DATA$soc_pc #
 x <- DATA$t
 
 plot(y~x)
-
-# from oliver: 
-# fit2=nls(y~a+(b-a)*exp(-k*x),start=list(a=70, b=100, k=0.15), algorithm="port")
-# summary(fit2)
 
 # from oliver, adapted: 
 fit2=nls(y~a+(100-a)*exp(-k*x),start=list(a=60, k=0.15), algorithm="port")
@@ -109,12 +105,33 @@ g2 <- ggplot(DATA,aes(t,soc_pc, shape = Country, colour = Country)) +
   theme_bw()
 g2
 
-
-# Oliver ca.
-func3<- function(x) {60.4+(100-60.4)*exp(-0.1296*x)}
-
 g2 +
   stat_function(fun = func3, xlim=c(0,400), col = "blue", size = 1) 
+
+#### FOR RUBBER ####
+
+DATA=read.csv("data/van-straaten-soc.csv",h=T)
+#View(DATA)
+head(DATA)
+
+
+
+DATA$t<-DATA$Time.since.Deforestation
+DATA$soc_pc<-DATA$SOC_prop_top10_C2
+
+unique(DATA$Landuse)
+
+DATA<-DATA%>%filter(t<50)%>%filter(Country!="")%>%filter(Landuse == "Rubber")
+DATA<-DATA%>%filter(abs(d_Clay_50to100)<20)
+
+y <- DATA$soc_pc #
+x <- DATA$t
+
+plot(y~x)
+
+# from oliver, adapted: 
+fit2=nls(y~a+(100-a)*exp(-k*x),start=list(a=75, k=0.15), algorithm="port")
+summary(fit2)
 
 
   

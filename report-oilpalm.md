@@ -48,7 +48,7 @@ x <- DATA$t
 Let's plot this in a very basic form, do the fitting and then add the line:
 
 ``` r
-xx <- seq(0,605, length=1500)
+xx <- seq(0,50, length=500)
 plot(y~x)
 
 fit2=nls(y~a+(100-a)*exp(-k*x),start=list(a=60, k=0.15), algorithm="port")
