@@ -2,7 +2,7 @@
 title: "Oil palm SOC and leaf litter decomposition"
 author: "Marcus Schmidt"
 date: "8 November 2019"
-output: github_document
+output: word_document
 ---
 
 ### Background
