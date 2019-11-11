@@ -91,17 +91,12 @@ plot(y~x)
 # summary(fit2)
 
 # from oliver, adapted: 
-fit2=nls(y~a+(b-a)*exp(-k*x),start=list(a=70, b=100, k=0.15), algorithm="port")
+fit2=nls(y~a+(100-a)*exp(-k*x),start=list(a=60, k=0.15), algorithm="port")
 summary(fit2)
 
-
-# my try:
-fit3 <- nls(y ~ (100 * 2.718^(-k * x)), start=list(k=0.15))
-fit3 <- nls(y ~ (100 * exp(-k * x)), start=list(k=0.15))
-
 xx <- seq(0,605, length=1500)
-lines(xx, predict(fit3, data.frame(x=xx)), col="red", lwd=2, lty=1)
-summary(fit3)
+lines(xx, predict(fit2, data.frame(x=xx)), col="red", lwd=2, lty=1)
+summary(fit2)
 
 g2 <- ggplot(DATA,aes(t,soc_pc, shape = Country, colour = Country)) +
     geom_hline(yintercept=100) +
@@ -114,17 +109,13 @@ g2 <- ggplot(DATA,aes(t,soc_pc, shape = Country, colour = Country)) +
   theme_bw()
 g2
 
-func2<- function(x) {100 * 2.718^(-0.021389 * x)}
-func2
 
 # Oliver ca.
-func3<- function(x) {60+(100-60)*exp(-0.14*x)}
+func3<- function(x) {60.4+(100-60.4)*exp(-0.1296*x)}
 
 g2 +
-  stat_function(fun = func2, xlim=c(0,400), col = "red", size = 1) +
   stat_function(fun = func3, xlim=c(0,400), col = "blue", size = 1) 
 
-g2 
 
   
 
