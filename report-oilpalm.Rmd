@@ -87,7 +87,7 @@ This data was collected in Indonesia where oil palm leafs are put in between oil
 
 I am first going to load my data from the .txt file I created and look at the first 5 observations too see what's going on:
 ```{r data-loading, echo = T, results = 'hide'}
-DATA=read.table("data/schmidt-nut-data.txt",h=T)
+DATA=read.table("data/leaf-decomp-data.txt",h=T)
 head(DATA)
 ```
 

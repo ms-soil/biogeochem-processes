@@ -5,7 +5,7 @@ Marcus Schmidt
 
 ### Background
 
-In the following course, we are looking at two processes in oil palm plantations: 1) Soil organic Carbon (SOC) remaining after deforestation 2) Decomposition of oil palm leafs
+In the following course, we are looking at two processes in oil palm plantations: 1) Soil organic carbon (SOC) remaining after deforestation and 2) Decomposition of oil palm leafs
 
 ### Part 1 - SOC remaining
 
@@ -31,7 +31,7 @@ DATA$t<-DATA$Time.since.Deforestation
 DATA$soc_pc<-DATA$SOC_prop_top10_C2
 ```
 
-Next, I apply a filter to exclude observations without country, only oil palm and clay content doesn't change more than 20%.
+Next, I apply a filter to exclude observations that don't state the country. We also want only oil palm observations and lastly, clay content shouldn't change more than 20%.
 
 ``` r
 DATA<-DATA%>%filter(Country!="")%>%filter(Landuse == "Oil palm")
@@ -118,7 +118,7 @@ This data was collected in Indonesia where oil palm leafs are put in between oil
 I am first going to load my data from the .txt file I created and look at the first 5 observations too see what's going on:
 
 ``` r
-DATA=read.table("data/schmidt-nut-data.txt",h=T)
+DATA=read.table("data/leaf-decomp-data.txt",h=T)
 head(DATA)
 ```
 
@@ -176,7 +176,7 @@ In the output above, we are given the k and some information on how well it fits
 
 We made the plot using the basic plot package in R. However, in order to get a much nicer plot, I recommend using the ggplot 2 package. It's already included in the tidyverse library we installed earlier.
 
-We first define the functin including k, which we get from above and define what data we want to use:
+We first define the function including k, which we get from above and define what data we want to use:
 
 ``` r
 func1<- function(x) {50.81 * 2.718^(-0.0052707 * x)}

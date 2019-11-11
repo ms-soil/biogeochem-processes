@@ -9,7 +9,7 @@ library("graphics")
 library("tidyverse")
 
 #### Oil palm: FIT DECOMPOSITION OF Clay Acrisol 1 ####
-DATA=read.table("data/schmidt-nut-data.txt",h=T)
+DATA=read.table("data/leaf-decomp-data.txt",h=T)
 #View(DATA)
 head(DATA)
 
