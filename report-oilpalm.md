@@ -111,7 +111,7 @@ g2 +
 
 ![](report-oilpalm_files/figure-markdown_github/final%20plotting-1.png)
 
-### Part 2 - Decomposition
+### Part 2a - Decomposition of Clay Acrisol 1
 
 This data was collected in Indonesia where oil palm leafs are put in between oil palm rows and left there to decompose.
 
@@ -205,3 +205,134 @@ To save your plot in a folder called figs within your project, we can use the co
 library(cowplot)
 ggsave("figs/oil-palm-decomp.png", plot = g1, width = 10, height = 10)
 ```
+
+### Part 2b - Decomposition representing the whole study area
+
+We have previously looked at one of our plots but that does not represent our whole study area. Also, we want to get rid of our subplots because only our plots are true replicates.
+
+So first we read in our data and only keep the first 5 columns:
+
+``` r
+DATA=read.table("data/leaf-decomp-data.txt",h=T)
+names(DATA)
+```
+
+    ##  [1] "Time"    "day"     "Plot"    "Subplot" "Mass_g"  "Al_mg_L" "Ca_mg_L"
+    ##  [8] "Cd_ppb"  "Co_ppb"  "Cr_ppb"  "Cu_ppb"  "Fe_mg_L" "K_mg_L"  "Mg_mg_L"
+    ## [15] "Mn_mg_L" "Na_mg_L" "Ni_ppb"  "P_mg_L"  "Pb_ppb"  "S_mg_L"  "Zn_ppb" 
+    ## [22] "tot_C_." "tot_N_." "C_N"
+
+``` r
+selection<-names(DATA)[1:5]
+DATA<-DATA%>%select(selection)
+head(DATA)
+```
+
+    ##   Time day Plot Subplot Mass_g
+    ## 1   T0   0   C1       1  50.81
+    ## 2   T0   0   C1       2  52.41
+    ## 3   T0   0   C1       3  48.41
+    ## 4   T0   0   C1       4  50.89
+    ## 5   T0   0   C2       5  47.51
+    ## 6   T0   0   C2       6  51.19
+
+We then group and summarize our data - assigning a mean for each plot and day. For our example this means that we do not anymore distinguish by subplot.
+
+``` r
+DATA<-DATA%>%group_by(day, Time, Plot)%>%summarize(plot_mass_g = mean(Mass_g))
+DATA<-data.frame(DATA)
+head(DATA)
+```
+
+    ##   day Time Plot plot_mass_g
+    ## 1   0   T0   C1     50.6300
+    ## 2   0   T0   C2     49.7450
+    ## 3   0   T0   L1     49.7350
+    ## 4   0   T0   L2     51.0350
+    ## 5  36   T1   C1     42.7625
+    ## 6  36   T1   C2     43.0850
+
+Now we define our x, our y and the sequence for our fitting
+
+``` r
+x<-DATA$day
+y<-DATA$plot_mass_g
+xx <- seq(0,400, length=800)
+```
+
+Next is the fitting itself. Again, we take 50g as the basis from which decomposition starts.
+
+``` r
+fit <- nls(y ~ (50 * exp(-k * x)), start=list(k=0.00001))
+summary(fit)
+```
+
+To have it handy later, we are saving our k of the fit
+
+``` r
+k<-0.0048034
+```
+
+You can now do the simple plot like this, but I will not show it here:
+
+``` r
+# plot(x,y)
+# lines(xx, predict(fit, data.frame(x=xx)), col="red", lwd=2, lty=1)
+```
+
+Instead, let's do it with ggplot:
+
+``` r
+func1<-func1<- function(x) {50 * exp(-k * x)}
+
+g1 <- ggplot(,aes(x,y)) +
+  xlim(0,400) +
+  ylim(0,60) +
+  geom_point(show.legend = FALSE) +
+  ggtitle("Leaf mass decline on all plots") +
+  xlab("days") +
+  ylab("remaining mass in g") +
+  stat_function(fun = func1, xlim=c(0,400), col = "red") 
+g1
+```
+
+![](report-oilpalm_files/figure-markdown_github/ch6-1.png)
+
+This looks nice alreay, but to give a more common representation, let's make it a line that includes the plot means and standard errors:
+
+``` r
+DATA<-DATA%>%group_by(day,Time)%>%summarize(mean_mass_g = mean(plot_mass_g), se_g = sd(plot_mass_g/sqrt(4)))
+head(DATA)
+```
+
+    ## # A tibble: 6 x 4
+    ## # Groups:   day [6]
+    ##     day Time  mean_mass_g  se_g
+    ##   <int> <fct>       <dbl> <dbl>
+    ## 1     0 T0           50.3 0.326
+    ## 2    36 T1           43.3 0.274
+    ## 3    66 T2           35.9 0.780
+    ## 4    99 T3           32.3 0.503
+    ## 5   125 T4           29.9 0.537
+    ## 6   157 T5           26.1 0.697
+
+``` r
+x<-DATA$day
+y<-DATA$mean_mass_g
+z<-DATA$se_g # for error visability
+
+library(sciplot)
+
+g2 <- ggplot(,aes(x,y)) +
+  xlim(0,400) +
+  ylim(0,60) +
+  geom_line(show.legend = FALSE) +
+  ggtitle("Leaf mass decline for area") +
+  xlab("days") +
+  ylab("remaining mass in g") +
+  stat_function(fun = func1, xlim=c(0,400), col = "red")  +
+  geom_errorbar(aes(ymin=y-z, ymax=y+z), colour="black", width=.1) 
+g2
+```
+
+![](report-oilpalm_files/figure-markdown_github/ch7-1.png)

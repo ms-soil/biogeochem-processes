@@ -82,7 +82,7 @@ g2 +
 
 
 
-### Part 2 - Decomposition
+### Part 2a - Decomposition of Clay Acrisol 1
 This data was collected in Indonesia where oil palm leafs are put in between oil palm rows and left there to decompose.
 
 I am first going to load my data from the .txt file I created and look at the first 5 observations too see what's going on:
@@ -161,4 +161,101 @@ To save your plot in a folder called figs within your project, we can use the co
 library(cowplot)
 ggsave("figs/oil-palm-decomp.png", plot = g1, width = 10, height = 10)
 ```
+
+### Part 2b - Decomposition representing the whole study area
+We have previously looked at one of our plots but that does not represent our whole study area. Also, we want to get rid of our subplots because only our plots are true replicates.
+
+So first we read in our data and only keep the first 5 columns:
+
+```{r ch1, echo = T}
+DATA=read.table("data/leaf-decomp-data.txt",h=T)
+names(DATA)
+selection<-names(DATA)[1:5]
+DATA<-DATA%>%select(selection)
+head(DATA)
+```
+
+
+We then group and summarize our data - assigning a mean for each plot and day. For our example this means that we do not anymore distinguish by subplot.
+
+```{r ch2, echo = T, , warning=F}
+DATA<-DATA%>%group_by(day, Time, Plot)%>%summarize(plot_mass_g = mean(Mass_g))
+DATA<-data.frame(DATA)
+head(DATA)
+```
+
+Now we define our x, our y and the sequence for our fitting
+
+```{r ch3, echo =T}
+x<-DATA$day
+y<-DATA$plot_mass_g
+xx <- seq(0,400, length=800)
+```
+
+Next is the fitting itself. Again, we take 50g as the basis from which decomposition starts.
+
+```{r ch3b, echo=T, results = "hide"}
+fit <- nls(y ~ (50 * exp(-k * x)), start=list(k=0.00001))
+summary(fit)
+
+```
+
+
+To have it handy later, we are saving our k of the fit
+
+```{r ch4, echo = T}
+k<-0.0048034
+```
+
+You can now do the simple plot like this, but I will not show it here:
+```{r ch5, echo = T}
+# plot(x,y)
+# lines(xx, predict(fit, data.frame(x=xx)), col="red", lwd=2, lty=1)
+```
+
+Instead, let's do it with ggplot:
+
+```{r ch6, echo = T}
+func1<-func1<- function(x) {50 * exp(-k * x)}
+
+g1 <- ggplot(,aes(x,y)) +
+  xlim(0,400) +
+  ylim(0,60) +
+  geom_point(show.legend = FALSE) +
+  ggtitle("Leaf mass decline on all plots") +
+  xlab("days") +
+  ylab("remaining mass in g") +
+  stat_function(fun = func1, xlim=c(0,400), col = "red") 
+g1
+```
+
+
+This looks nice alreay, but to give a more common representation, let's make it a line that includes the plot means and standard errors for each month:
+
+```{r ch7, echo = T}
+DATA<-DATA%>%group_by(day,Time)%>%summarize(mean_mass_g = mean(plot_mass_g), se_g = sd(plot_mass_g/sqrt(4)))
+head(DATA)
+x<-DATA$day
+y<-DATA$mean_mass_g
+z<-DATA$se_g # for error visability
+
+library(sciplot)
+
+g2 <- ggplot(,aes(x,y)) +
+  xlim(0,400) +
+  ylim(0,60) +
+  geom_line(show.legend = FALSE) +
+  ggtitle("Leaf mass decline for area") +
+  xlab("days") +
+  ylab("remaining mass in g") +
+  stat_function(fun = func1, xlim=c(0,400), col = "red")  +
+  geom_errorbar(aes(ymin=y-z, ymax=y+z), colour="black", width=.1) 
+g2
+
+
+```
+
+
+
+
 
