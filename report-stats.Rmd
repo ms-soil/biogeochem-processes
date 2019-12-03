@@ -1,0 +1,124 @@
+---
+title: "Multi-group basic stats"
+author: "Marcus Schmidt"
+date: "3 December 2019"
+output: html_document
+---
+
+## Background
+
+In this exercise, we will compare four groups (land uses) statistically to see if there are significant differences. A significance level of p = 0.05 means that there is a probability of less than 5% that what we find is just coincidence. So we are 95% sure of our result.
+
+## Data arrangement
+
+```{r libs, echo = T, results='hide', message=F, warning=F}
+library(tidyverse)
+library(readxl)
+```
+
+This time, let's read in our data directly from Excel. We do this using the readxl package that we loaded above. Since the second row is units, we just keep everything starting with row 2.
+
+```{r readin, echo = T, warning = F}
+d<-read_xlsx("data/pract-data-summary.xlsx")%>%slice(2:1000)
+head(d)
+```
+
+Let' shorten our variables a little bit and take out the blanks in the names:
+
+```{r rename, echo = T, results = 'hide'}
+names(d)
+d<-d%>%dplyr::rename(
+  landuse = 'land use',
+  bd = 'bulk density',
+  ecec = 'Effective cation exchange capacity',
+  n2fix = 'N2 fixation',
+  co2flux = 'CO2 fluxes',
+  totn = 'total N',
+  n2oflux = 'N2O fluxes',
+  ch4flux = 'CH4 fluxes',
+  soiltemp = 'soil temp'
+)
+```
+
+Let's see our new names:
+
+```{r show1, echo = T}
+names(d)
+```
+
+Looking at 'head(d)' shows us that landuse is of type character, but we want it to be a factor with shorter names as well. Additionally, let's make all other variables numeric. Check with 'head(d)' again afterwards to see if it worked.
+
+```{r numeric, echo = T, results = 'hide', message=F, warning=F}
+d[[1]]<-as.factor(d[[1]])
+levels(d[[1]])
+
+library(plyr)
+d$landuse<-mapvalues(d$landuse, from = levels(d[[1]]), 
+              to = c("CAC", "CAT", "FL", "FU"))
+detach(package:plyr)
+
+class(d[[3]])<-"numeric" 
+head(d)
+
+for (i in list(4,5,6,7,8,9,10,11)) {
+ class(d[[i]])<-"numeric" 
+}
+```
+
+
+## Stats analysis: conditions
+
+There are parametric tests that are more likely to detect differences, but they assume that the data meet certain criteria. Hence, you are only allowed to us them if the criteria (contitions) are met.
+
+Two of the main conditions that need to be tested are normality and homogeneity of variances. For each of them, we conduct a test but also visually inspect our data to get a better impression.
+
+```{r normality, echo = T, message=F, warning=F}
+# Normality: Shapiro-Wilk test of model residuals 
+# (package stats):
+shapiro.test(residuals(lm(d$soiltemp~d$landuse)))
+res<-residuals(lm(d$soiltemp~d$landuse))
+library(MASS)
+truehist(res)
+```
+
+```{r hom-of-var, echo = T, message=F, warning=F}
+# Homogeneity of variances: Levene's test 
+# (package car; may need package lme4 as well)
+library(car)
+leveneTest(d$soiltemp~d$landuse)
+plot(d$soiltemp~d$landuse)
+```
+
+Both these tests fail if p < 0.05 and conditions are met if p > 0.05.
+
+## Stats analysis: significance tests
+
+Now that we tested these conditions we can decide on a parametric or non-parametric test:
+
+### Parametric data 
+
+```{r param, message = F, warning = F}
+# (both conditions hold with p > 0.05)
+model1=aov(soiltemp  ~ landuse, data = d)
+anova(model1)
+# post-hoc test
+TukeyHSD(model1)
+
+library(agricolae)
+result<-LSD.test(model1, "landuse", p.adj = "holm")
+# try p.adj = "none" - what happens?
+plot(result, variation = "SD")
+# try variation = "SE" - what happens?
+```
+
+### Non-parametric data
+
+```{r non-param}
+# (one/both of the conditions do not hold with p < 0.05)
+kruskal.test(SOC~landuse, data=d)
+
+library(pgirmess)
+kruskalmc(d$SOC~d$landuse, probs=0.05, cont=NULL) 
+```
+
+Remember to only conduct a post-hoc test if your global test yields a p < 0.05.
