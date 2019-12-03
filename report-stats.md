@@ -152,27 +152,8 @@ anova(model1)
 
 ``` r
 # post-hoc test
-TukeyHSD(model1)
-```
-
-    ##   Tukey multiple comparisons of means
-    ##     95% family-wise confidence level
-    ## 
-    ## Fit: aov(formula = soiltemp ~ landuse, data = d)
-    ## 
-    ## $landuse
-    ##          diff        lwr        upr     p adj
-    ## CAT-CAC -0.58 -1.0518515 -0.1081485 0.0136717
-    ## FL-CAC  -1.54 -2.0118515 -1.0681485 0.0000004
-    ## FU-CAC  -1.82 -2.2918515 -1.3481485 0.0000000
-    ## FL-CAT  -0.96 -1.4318515 -0.4881485 0.0001388
-    ## FU-CAT  -1.24 -1.7118515 -0.7681485 0.0000067
-    ## FU-FL   -0.28 -0.7518515  0.1918515 0.3567774
-
-``` r
 library(agricolae)
 result<-LSD.test(model1, "landuse", p.adj = "holm")
-# try p.adj = "none" - what happens?
 plot(result, variation = "SD")
 ```
 
@@ -196,6 +177,7 @@ kruskal.test(SOC~landuse, data=d)
     ## Kruskal-Wallis chi-squared = 15.48, df = 3, p-value = 0.001449
 
 ``` r
+# post-hoc test
 library(pgirmess)
 kruskalmc(d$SOC~d$landuse, probs=0.05, cont=NULL) 
 ```
