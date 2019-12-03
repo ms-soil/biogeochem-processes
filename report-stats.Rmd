@@ -2,7 +2,7 @@
 title: "Multi-group basic stats"
 author: "Marcus Schmidt"
 date: "3 December 2019"
-output: html_document
+output: github_document
 ---
 
 ## Background
