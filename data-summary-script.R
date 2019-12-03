@@ -61,9 +61,9 @@ TukeyHSD(model1)
 
 library(agricolae)
 result<-LSD.test(model1, "landuse", p.adj = "holm")
-# try p.adj = "none" - what happens?
-plot(result, variation = "SE")
-# try variation = "SD" - what happens?
+
+plot(result, variation = "SD")
+# try variation = "SE" - what happens?
 
 # in case on non-parametric data
 # (one/both of the conditions do not hold with p < 0.05)

@@ -101,12 +101,10 @@ Now that we tested these conditions we can decide on a parametric or non-paramet
 # (both conditions hold with p > 0.05)
 model1=aov(soiltemp  ~ landuse, data = d)
 anova(model1)
-# post-hoc test
-TukeyHSD(model1)
 
+# post-hoc test
 library(agricolae)
 result<-LSD.test(model1, "landuse", p.adj = "holm")
-# try p.adj = "none" - what happens?
 plot(result, variation = "SD")
 # try variation = "SE" - what happens?
 ```
@@ -117,6 +115,7 @@ plot(result, variation = "SD")
 # (one/both of the conditions do not hold with p < 0.05)
 kruskal.test(SOC~landuse, data=d)
 
+# post-hoc test
 library(pgirmess)
 kruskalmc(d$SOC~d$landuse, probs=0.05, cont=NULL) 
 ```
