@@ -51,6 +51,8 @@ y <- DATA$soc_pc #
 x <- DATA$t
 ```
 
+#### Basic plotting
+
 Let's plot this in a very basic form, do the fitting and then add the line:
 ```{r basic-plot, echo = T}
 xx <- seq(0,50, length=500)
@@ -83,7 +85,7 @@ print(paste0("Our turnover time is: ",round(turnover_time,2)," years"))
 
 ```
 
-
+#### Advanced plotting with ggplot2
 
 The plot will look much nicer in ggplot2, however:
 ```{r nicer-plotting, echo = T}

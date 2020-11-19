@@ -1,7 +1,7 @@
 Oil palm SOC and leaf litter decomposition
 ================
 Marcus Schmidt
-8 November 2019
+19 November 2020
 
 ### Background
 
@@ -55,6 +55,8 @@ our axes:
 y <- DATA$soc_pc #
 x <- DATA$t
 ```
+
+#### Basic plotting
 
 Let’s plot this in a very basic form, do the fitting and then add the
 line:
@@ -126,6 +128,8 @@ print(paste0("Our turnover time is: ",round(turnover_time,2)," years"))
 
     ## [1] "Our turnover time is: 7.72 years"
 
+#### Advanced plotting with ggplot2
+
 The plot will look much nicer in ggplot2, however:
 
 ``` r
@@ -157,8 +161,8 @@ g2 +
 #### Exercise (to be added to course folder):
 
 Add your name and the turnover time into the plot using annotate().
-Create a PDF file including your plot and the code you. Add this to the
-course folder.
+Create a PDF file including your plot and the code you used. Add this to
+the course folder.
 
 ### Part 2a - Decomposition of Clay Acrisol 1
 
