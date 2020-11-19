@@ -5,47 +5,59 @@ Marcus Schmidt
 
 ### Background
 
-In the following course, we are looking at two processes in oil palm plantations: 1) Soil organic carbon (SOC) remaining after deforestation and 2) Decomposition of oil palm leafs
+In the following course, we are looking at two processes in oil palm
+plantations: 1) Soil organic carbon (SOC) remaining after deforestation
+and 2) Decomposition of oil palm leafs
 
 ### Part 1 - SOC remaining
 
-This data is part of a study on deforestation and land luse conversion in Indonesia, Cameroon and Peru. You can find the whole paper here: <https://www.pnas.org/content/112/32/9956>
+This data is part of a study on deforestation and land luse conversion
+in Indonesia, Cameroon and Peru. You can find the whole paper here:
+<https://www.pnas.org/content/112/32/9956>
 
-Let's fist load our library. It is the tidyverse library, which includes useful tools for data handling and visualization, i.e. the ggplot 2 package.
+Let’s fist load our library. It is the tidyverse library, which includes
+useful tools for data handling and visualization, i.e. the ggplot 2
+package.
 
 ``` r
 library("tidyverse")
 ```
 
-Let's now read in our data and look at the upper part:
+Let’s now read in our data and look at the upper part:
 
 ``` r
 DATA=read.csv("data/van-straaten-soc.csv",h=T)
 head(DATA)
 ```
 
-I like to shorten our variables a little bit, it will be easier to type then:
+I like to shorten our variables a little bit, it will be easier to type
+then:
 
 ``` r
 DATA$t<-DATA$Time.since.Deforestation
 DATA$soc_pc<-DATA$SOC_prop_top10_C2
 ```
 
-Next, I apply a filter to exclude observations that don't state the country. We also want only oil palm observations and lastly, clay content shouldn't change more than 20%.
+Next, I apply a filter to exclude observations that don’t state the
+country. We also want only oil palm observations and lastly, clay
+content shouldn’t change more than 20%.
 
 ``` r
 DATA<-DATA%>%filter(Country!="")%>%filter(Landuse == "Oil palm")
 DATA<-DATA%>%filter(abs(d_Clay_50to100)<20)
 ```
 
-Now, for some of the following coding, it's easier to give a shorter name to some variables. We choose x and y because this we will have on our axes:
+Now, for some of the following coding, it’s easier to give a shorter
+name to some variables. We choose x and y because this we will have on
+our axes:
 
 ``` r
 y <- DATA$soc_pc #
 x <- DATA$t
 ```
 
-Let's plot this in a very basic form, do the fitting and then add the line:
+Let’s plot this in a very basic form, do the fitting and then add the
+line:
 
 ``` r
 xx <- seq(0,50, length=500)
@@ -56,7 +68,7 @@ fit2=nls(y~a+(100-a)*exp(-k*x),start=list(a=60, k=0.15), algorithm="port")
 lines(xx, predict(fit2, data.frame(x=xx)), col="red", lwd=2, lty=1)
 ```
 
-![](report-oilpalm_files/figure-markdown_github/basic-plot-1.png)
+![](report-oilpalm_files/figure-gfm/basic-plot-1.png)<!-- -->
 
 ``` r
 summary(fit2)
@@ -77,6 +89,43 @@ summary(fit2)
     ## Algorithm "port", convergence message: relative convergence (4)
     ##   (4 observations deleted due to missingness)
 
+This is a nice summary, but how do we extract k, for example?
+
+``` r
+summary(fit2)$coefficients
+```
+
+    ##     Estimate Std. Error  t value     Pr(>|t|)
+    ## a 60.4117293  9.9785659 6.054149 2.206424e-05
+    ## k  0.1296153  0.1065655 1.216297 2.426658e-01
+
+``` r
+k <- summary(fit2)$coefficients[2,1]
+k
+```
+
+    ## [1] 0.1296153
+
+#### Calculating turnover time
+
+k can be though of as the fraction of organic carbon that is lost every
+year. We can therefore calculate turnover time by 1/k. 1 is the whole of
+the carbon at the beginning so how many k’s (fractions per year) do we
+need to lose until everything is gone/turned over?
+
+``` r
+turnover_time <-  1/k
+turnover_time
+```
+
+    ## [1] 7.715138
+
+``` r
+print(paste0("Our turnover time is: ",round(turnover_time,2)," years"))
+```
+
+    ## [1] "Our turnover time is: 7.72 years"
+
 The plot will look much nicer in ggplot2, however:
 
 ``` r
@@ -92,9 +141,7 @@ g2 <- ggplot(DATA,aes(t,soc_pc, shape = Country, colour = Country)) +
 g2
 ```
 
-    ## Warning: Removed 4 rows containing missing values (geom_point).
-
-![](report-oilpalm_files/figure-markdown_github/nicer-plotting-1.png)
+![](report-oilpalm_files/figure-gfm/nicer-plotting-1.png)<!-- -->
 
 Finally, we will add the curve to our ggplot:
 
@@ -105,17 +152,21 @@ g2 +
   stat_function(fun = func3, xlim=c(0,400), col = "blue", size = 1) 
 ```
 
-    ## Warning: Removed 4 rows containing missing values (geom_point).
+![](report-oilpalm_files/figure-gfm/final%20plotting-1.png)<!-- -->
 
-    ## Warning: Removed 264 rows containing missing values (geom_path).
+#### Exercise (to be added to course folder):
 
-![](report-oilpalm_files/figure-markdown_github/final%20plotting-1.png)
+Add your name and the turnover time into the plot using annotate().
+Create a PDF file including your plot and the code you. Add this to the
+course folder.
 
 ### Part 2a - Decomposition of Clay Acrisol 1
 
-This data was collected in Indonesia where oil palm leafs are put in between oil palm rows and left there to decompose.
+This data was collected in Indonesia where oil palm leafs are put in
+between oil palm rows and left there to decompose.
 
-I am first going to load my data from the .txt file I created and look at the first 5 observations too see what's going on:
+I am first going to load my data from the .txt file I created and look
+at the first 5 observations too see what’s going on:
 
 ``` r
 DATA=read.table("data/leaf-decomp-data.txt",h=T)
@@ -130,7 +181,9 @@ View(DATA)
 
 to see the whole data set.
 
-We now want to look at the first soil type (Clay Acrisol) at the first site, so we create a subset like this, using the pipe (%&gt;%) from the tidyverse package. Then we check if this really worked.
+We now want to look at the first soil type (Clay Acrisol) at the first
+site, so we create a subset like this, using the pipe (%\>%) from the
+tidyverse package. Then we check if this really worked.
 
 ``` r
 DATA<-DATA%>%filter(Plot == "C1")
@@ -140,7 +193,8 @@ unique(DATA$Plot)
     ## [1] C1
     ## Levels: C1 C2 L1 L2
 
-The next part is key! We are plotting our Data - days and mass, fit an exponential cuve and retrieve k, our decomposition rate:
+The next part is key\! We are plotting our Data - days and mass, fit an
+exponential cuve and retrieve k, our decomposition rate:
 
 ``` r
 xx <- seq(0,605, length=1500)
@@ -152,7 +206,7 @@ fit <- nls(y ~ (50.81 * 2.718^(-k * x)), start=list(k=0.00001))
 lines(xx, predict(fit, data.frame(x=xx)), col="red", lwd=2, lty=1)
 ```
 
-![](report-oilpalm_files/figure-markdown_github/fitting-and-plotting-1.png)
+![](report-oilpalm_files/figure-gfm/fitting-and-plotting-1.png)<!-- -->
 
 ``` r
 summary(fit)
@@ -172,11 +226,15 @@ summary(fit)
     ## Number of iterations to convergence: 6 
     ## Achieved convergence tolerance: 5.804e-07
 
-In the output above, we are given the k and some information on how well it fits the observed data.
+In the output above, we are given the k and some information on how well
+it fits the observed data.
 
-We made the plot using the basic plot package in R. However, in order to get a much nicer plot, I recommend using the ggplot 2 package. It's already included in the tidyverse library we installed earlier.
+We made the plot using the basic plot package in R. However, in order to
+get a much nicer plot, I recommend using the ggplot 2 package. It’s
+already included in the tidyverse library we installed earlier.
 
-We first define the function including k, which we get from above and define what data we want to use:
+We first define the function including k, which we get from above and
+define what data we want to use:
 
 ``` r
 func1<- function(x) {50.81 * 2.718^(-0.0052707 * x)}
@@ -197,9 +255,11 @@ g1 <- ggplot(dat1,aes(x,y)) +
 g1
 ```
 
-And this is what we get: ![](report-oilpalm_files/figure-markdown_github/gg-plot-output-1.png)
+And this is what we get:
+![](report-oilpalm_files/figure-gfm/gg-plot-output-1.png)<!-- -->
 
-To save your plot in a folder called figs within your project, we can use the cowplot package.
+To save your plot in a folder called figs within your project, we can
+use the cowplot package.
 
 ``` r
 library(cowplot)
@@ -208,7 +268,9 @@ ggsave("figs/oil-palm-decomp.png", plot = g1, width = 10, height = 10)
 
 ### Part 2b - Decomposition representing the whole study area
 
-We have previously looked at one of our plots but that does not represent our whole study area. Also, we want to get rid of our subplots because only our plots are true replicates.
+We have previously looked at one of our plots but that does not
+represent our whole study area. Also, we want to get rid of our subplots
+because only our plots are true replicates.
 
 So first we read in our data and only keep the first 5 columns:
 
@@ -236,7 +298,9 @@ head(DATA)
     ## 5   T0   0   C2       5  47.51
     ## 6   T0   0   C2       6  51.19
 
-We then group and summarize our data - assigning a mean for each plot and day. For our example this means that we do not anymore distinguish by subplot.
+We then group and summarize our data - assigning a mean for each plot
+and day. For our example this means that we do not anymore distinguish
+by subplot.
 
 ``` r
 DATA<-DATA%>%group_by(day, Time, Plot)%>%summarize(plot_mass_g = mean(Mass_g))
@@ -260,7 +324,8 @@ y<-DATA$plot_mass_g
 xx <- seq(0,400, length=800)
 ```
 
-Next is the fitting itself. Again, we take 50g as the basis from which decomposition starts.
+Next is the fitting itself. Again, we take 50g as the basis from which
+decomposition starts.
 
 ``` r
 fit <- nls(y ~ (50 * exp(-k * x)), start=list(k=0.00001))
@@ -280,7 +345,7 @@ You can now do the simple plot like this, but I will not show it here:
 # lines(xx, predict(fit, data.frame(x=xx)), col="red", lwd=2, lty=1)
 ```
 
-Instead, let's do it with ggplot:
+Instead, let’s do it with ggplot:
 
 ``` r
 func1<-func1<- function(x) {50 * exp(-k * x)}
@@ -296,9 +361,11 @@ g1 <- ggplot(,aes(x,y)) +
 g1
 ```
 
-![](report-oilpalm_files/figure-markdown_github/ch6-1.png)
+![](report-oilpalm_files/figure-gfm/ch6-1.png)<!-- -->
 
-This looks nice alreay, but to give a more common representation, let's make it a line that includes the plot means and standard errors:
+This looks nice alreay, but to give a more common representation, let’s
+make it a line that includes the plot means and standard errors for each
+month:
 
 ``` r
 DATA<-DATA%>%group_by(day,Time)%>%summarize(mean_mass_g = mean(plot_mass_g), se_g = sd(plot_mass_g/sqrt(4)))
@@ -335,4 +402,4 @@ g2 <- ggplot(,aes(x,y)) +
 g2
 ```
 
-![](report-oilpalm_files/figure-markdown_github/ch7-1.png)
+![](report-oilpalm_files/figure-gfm/ch7-1.png)<!-- -->

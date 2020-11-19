@@ -1,0 +1,554 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Oil palm SOC and leaf litter decomposition},
+  pdfauthor={Marcus Schmidt},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{Oil palm SOC and leaf litter decomposition}
+\author{Marcus Schmidt}
+\date{8 November 2019}
+
+\begin{document}
+\maketitle
+
+\hypertarget{background}{%
+\subsubsection{Background}\label{background}}
+
+In the following course, we are looking at two processes in oil palm
+plantations: 1) Soil organic carbon (SOC) remaining after deforestation
+and 2) Decomposition of oil palm leafs
+
+\hypertarget{part-1---soc-remaining}{%
+\subsubsection{Part 1 - SOC remaining}\label{part-1---soc-remaining}}
+
+This data is part of a study on deforestation and land luse conversion
+in Indonesia, Cameroon and Peru. You can find the whole paper here:
+\url{https://www.pnas.org/content/112/32/9956}
+
+Let's fist load our library. It is the tidyverse library, which includes
+useful tools for data handling and visualization, i.e.~the ggplot 2
+package.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(}\StringTok{"tidyverse"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Let's now read in our data and look at the upper part:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{DATA=}\KeywordTok{read.csv}\NormalTok{(}\StringTok{"data/van-straaten-soc.csv"}\NormalTok{,}\DataTypeTok{h=}\NormalTok{T)}
+\KeywordTok{head}\NormalTok{(DATA)}
+\end{Highlighting}
+\end{Shaded}
+
+I like to shorten our variables a little bit, it will be easier to type
+then:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{DATA}\OperatorTok{$}\NormalTok{t<-DATA}\OperatorTok{$}\NormalTok{Time.since.Deforestation}
+\NormalTok{DATA}\OperatorTok{$}\NormalTok{soc_pc<-DATA}\OperatorTok{$}\NormalTok{SOC_prop_top10_C2}
+\end{Highlighting}
+\end{Shaded}
+
+Next, I apply a filter to exclude observations that don't state the
+country. We also want only oil palm observations and lastly, clay
+content shouldn't change more than 20\%.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{DATA<-DATA}\OperatorTok{%>%}\KeywordTok{filter}\NormalTok{(Country}\OperatorTok{!=}\StringTok{""}\NormalTok{)}\OperatorTok{%>%}\KeywordTok{filter}\NormalTok{(Landuse }\OperatorTok{==}\StringTok{ "Oil palm"}\NormalTok{)}
+\NormalTok{DATA<-DATA}\OperatorTok{%>%}\KeywordTok{filter}\NormalTok{(}\KeywordTok{abs}\NormalTok{(d_Clay_50to100)}\OperatorTok{<}\DecValTok{20}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Now, for some of the following coding, it's easier to give a shorter
+name to some variables. We choose x and y because this we will have on
+our axes:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{y <-}\StringTok{ }\NormalTok{DATA}\OperatorTok{$}\NormalTok{soc_pc }\CommentTok{#}
+\NormalTok{x <-}\StringTok{ }\NormalTok{DATA}\OperatorTok{$}\NormalTok{t}
+\end{Highlighting}
+\end{Shaded}
+
+Let's plot this in a very basic form, do the fitting and then add the
+line:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{xx <-}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{50}\NormalTok{, }\DataTypeTok{length=}\DecValTok{500}\NormalTok{)}
+\KeywordTok{plot}\NormalTok{(y}\OperatorTok{~}\NormalTok{x)}
+
+\NormalTok{fit2=}\KeywordTok{nls}\NormalTok{(y}\OperatorTok{~}\NormalTok{a}\OperatorTok{+}\NormalTok{(}\DecValTok{100}\OperatorTok{-}\NormalTok{a)}\OperatorTok{*}\KeywordTok{exp}\NormalTok{(}\OperatorTok{-}\NormalTok{k}\OperatorTok{*}\NormalTok{x),}\DataTypeTok{start=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{a=}\DecValTok{60}\NormalTok{, }\DataTypeTok{k=}\FloatTok{0.15}\NormalTok{), }\DataTypeTok{algorithm=}\StringTok{"port"}\NormalTok{)}
+
+\KeywordTok{lines}\NormalTok{(xx, }\KeywordTok{predict}\NormalTok{(fit2, }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{x=}\NormalTok{xx)), }\DataTypeTok{col=}\StringTok{"red"}\NormalTok{, }\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{, }\DataTypeTok{lty=}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{report-oilpalm_files/figure-latex/basic-plot-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(fit2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Formula: y ~ a + (100 - a) * exp(-k * x)
+## 
+## Parameters:
+##   Estimate Std. Error t value Pr(>|t|)    
+## a  60.4117     9.9786   6.054 2.21e-05 ***
+## k   0.1296     0.1066   1.216    0.243    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 17.99 on 15 degrees of freedom
+## 
+## Algorithm "port", convergence message: relative convergence (4)
+##   (4 observations deleted due to missingness)
+\end{verbatim}
+
+The plot will look much nicer in ggplot2, however:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{g2 <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(DATA,}\KeywordTok{aes}\NormalTok{(t,soc_pc, }\DataTypeTok{shape =}\NormalTok{ Country, }\DataTypeTok{colour =}\NormalTok{ Country)) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{geom_hline}\NormalTok{(}\DataTypeTok{yintercept=}\DecValTok{100}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlim}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{50}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylim}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{150}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{show.legend =}\NormalTok{ T, }\DataTypeTok{size =} \DecValTok{3}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Change in organic carbon"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"Years since deforestation"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"Percent carbon remaining"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_bw}\NormalTok{()}
+\NormalTok{g2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 4 rows containing missing values (geom_point).
+\end{verbatim}
+
+\includegraphics{report-oilpalm_files/figure-latex/nicer-plotting-1.pdf}
+
+Finally, we will add the curve to our ggplot:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{func3<-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) \{}\FloatTok{60.4}\OperatorTok{+}\NormalTok{(}\DecValTok{100}\FloatTok{-60.4}\NormalTok{)}\OperatorTok{*}\KeywordTok{exp}\NormalTok{(}\OperatorTok{-}\FloatTok{0.1296}\OperatorTok{*}\NormalTok{x)\}}
+
+\NormalTok{g2 }\OperatorTok{+}
+\StringTok{  }\KeywordTok{stat_function}\NormalTok{(}\DataTypeTok{fun =}\NormalTok{ func3, }\DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{400}\NormalTok{), }\DataTypeTok{col =} \StringTok{"blue"}\NormalTok{, }\DataTypeTok{size =} \DecValTok{1}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 4 rows containing missing values (geom_point).
+\end{verbatim}
+
+\begin{verbatim}
+## Warning: Removed 264 rows containing missing values (geom_path).
+\end{verbatim}
+
+\includegraphics{report-oilpalm_files/figure-latex/final plotting-1.pdf}
+
+\hypertarget{part-2a---decomposition-of-clay-acrisol-1}{%
+\subsubsection{Part 2a - Decomposition of Clay Acrisol
+1}\label{part-2a---decomposition-of-clay-acrisol-1}}
+
+This data was collected in Indonesia where oil palm leafs are put in
+between oil palm rows and left there to decompose.
+
+I am first going to load my data from the .txt file I created and look
+at the first 5 observations too see what's going on:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{DATA=}\KeywordTok{read.table}\NormalTok{(}\StringTok{"data/leaf-decomp-data.txt"}\NormalTok{,}\DataTypeTok{h=}\NormalTok{T)}
+\KeywordTok{head}\NormalTok{(DATA)}
+\end{Highlighting}
+\end{Shaded}
+
+You may also want to try
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{View}\NormalTok{(DATA)}
+\end{Highlighting}
+\end{Shaded}
+
+to see the whole data set.
+
+We now want to look at the first soil type (Clay Acrisol) at the first
+site, so we create a subset like this, using the pipe (\%\textgreater\%)
+from the tidyverse package. Then we check if this really worked.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{DATA<-DATA}\OperatorTok{%>%}\KeywordTok{filter}\NormalTok{(Plot }\OperatorTok{==}\StringTok{ "C1"}\NormalTok{)}
+\KeywordTok{unique}\NormalTok{(DATA}\OperatorTok{$}\NormalTok{Plot)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] C1
+## Levels: C1 C2 L1 L2
+\end{verbatim}
+
+The next part is key! We are plotting our Data - days and mass, fit an
+exponential cuve and retrieve k, our decomposition rate:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{xx <-}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{605}\NormalTok{, }\DataTypeTok{length=}\DecValTok{1500}\NormalTok{)}
+\KeywordTok{plot}\NormalTok{(DATA}\OperatorTok{$}\NormalTok{Mass_g }
+     \OperatorTok{~}\StringTok{ }\NormalTok{DATA}\OperatorTok{$}\NormalTok{d)}
+\NormalTok{y <-}\StringTok{ }\NormalTok{DATA}\OperatorTok{$}\NormalTok{Mass_g}
+\NormalTok{x <-}\StringTok{ }\NormalTok{DATA}\OperatorTok{$}\NormalTok{d}
+\NormalTok{fit <-}\StringTok{ }\KeywordTok{nls}\NormalTok{(y }\OperatorTok{~}\StringTok{ }\NormalTok{(}\FloatTok{50.81} \OperatorTok{*}\StringTok{ }\FloatTok{2.718}\OperatorTok{^}\NormalTok{(}\OperatorTok{-}\NormalTok{k }\OperatorTok{*}\StringTok{ }\NormalTok{x)), }\DataTypeTok{start=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{k=}\FloatTok{0.00001}\NormalTok{))}
+\KeywordTok{lines}\NormalTok{(xx, }\KeywordTok{predict}\NormalTok{(fit, }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{x=}\NormalTok{xx)), }\DataTypeTok{col=}\StringTok{"red"}\NormalTok{, }\DataTypeTok{lwd=}\DecValTok{2}\NormalTok{, }\DataTypeTok{lty=}\DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{report-oilpalm_files/figure-latex/fitting-and-plotting-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(fit)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Formula: y ~ (50.81 * 2.718^(-k * x))
+## 
+## Parameters:
+##    Estimate Std. Error t value Pr(>|t|)    
+## k 0.0052707  0.0001223    43.1   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 2.582 on 51 degrees of freedom
+## 
+## Number of iterations to convergence: 6 
+## Achieved convergence tolerance: 5.804e-07
+\end{verbatim}
+
+In the output above, we are given the k and some information on how well
+it fits the observed data.
+
+We made the plot using the basic plot package in R. However, in order to
+get a much nicer plot, I recommend using the ggplot 2 package. It's
+already included in the tidyverse library we installed earlier.
+
+We first define the function including k, which we get from above and
+define what data we want to use:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{func1<-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) \{}\FloatTok{50.81} \OperatorTok{*}\StringTok{ }\FloatTok{2.718}\OperatorTok{^}\NormalTok{(}\OperatorTok{-}\FloatTok{0.0052707} \OperatorTok{*}\StringTok{ }\NormalTok{x)\}}
+\NormalTok{dat1 =}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ DATA}\OperatorTok{$}\NormalTok{d, }\DataTypeTok{y =}\NormalTok{ DATA}\OperatorTok{$}\NormalTok{Mass_g)}
+\end{Highlighting}
+\end{Shaded}
+
+Now we define the plot:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{g1 <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(dat1,}\KeywordTok{aes}\NormalTok{(x,y)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlim}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{400}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylim}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{60}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{show.legend =} \OtherTok{FALSE}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Leaf mass decline on Clay Aricsol 1"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"days"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"remaining mass in g"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{stat_function}\NormalTok{(}\DataTypeTok{fun =}\NormalTok{ func1, }\DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{400}\NormalTok{), }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+\NormalTok{g1}
+\end{Highlighting}
+\end{Shaded}
+
+And this is what we get:
+\includegraphics{report-oilpalm_files/figure-latex/gg-plot-output-1.pdf}
+
+To save your plot in a folder called figs within your project, we can
+use the cowplot package.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(cowplot)}
+\KeywordTok{ggsave}\NormalTok{(}\StringTok{"figs/oil-palm-decomp.png"}\NormalTok{, }\DataTypeTok{plot =}\NormalTok{ g1, }\DataTypeTok{width =} \DecValTok{10}\NormalTok{, }\DataTypeTok{height =} \DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{part-2b---decomposition-representing-the-whole-study-area}{%
+\subsubsection{Part 2b - Decomposition representing the whole study
+area}\label{part-2b---decomposition-representing-the-whole-study-area}}
+
+We have previously looked at one of our plots but that does not
+represent our whole study area. Also, we want to get rid of our subplots
+because only our plots are true replicates.
+
+So first we read in our data and only keep the first 5 columns:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{DATA=}\KeywordTok{read.table}\NormalTok{(}\StringTok{"data/leaf-decomp-data.txt"}\NormalTok{,}\DataTypeTok{h=}\NormalTok{T)}
+\KeywordTok{names}\NormalTok{(DATA)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "Time"    "day"     "Plot"    "Subplot" "Mass_g"  "Al_mg_L" "Ca_mg_L"
+##  [8] "Cd_ppb"  "Co_ppb"  "Cr_ppb"  "Cu_ppb"  "Fe_mg_L" "K_mg_L"  "Mg_mg_L"
+## [15] "Mn_mg_L" "Na_mg_L" "Ni_ppb"  "P_mg_L"  "Pb_ppb"  "S_mg_L"  "Zn_ppb" 
+## [22] "tot_C_." "tot_N_." "C_N"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{selection<-}\KeywordTok{names}\NormalTok{(DATA)[}\DecValTok{1}\OperatorTok{:}\DecValTok{5}\NormalTok{]}
+\NormalTok{DATA<-DATA}\OperatorTok{%>%}\KeywordTok{select}\NormalTok{(selection)}
+\KeywordTok{head}\NormalTok{(DATA)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Time day Plot Subplot Mass_g
+## 1   T0   0   C1       1  50.81
+## 2   T0   0   C1       2  52.41
+## 3   T0   0   C1       3  48.41
+## 4   T0   0   C1       4  50.89
+## 5   T0   0   C2       5  47.51
+## 6   T0   0   C2       6  51.19
+\end{verbatim}
+
+We then group and summarize our data - assigning a mean for each plot
+and day. For our example this means that we do not anymore distinguish
+by subplot.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{DATA<-DATA}\OperatorTok{%>%}\KeywordTok{group_by}\NormalTok{(day, Time, Plot)}\OperatorTok{%>%}\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{plot_mass_g =} \KeywordTok{mean}\NormalTok{(Mass_g))}
+\NormalTok{DATA<-}\KeywordTok{data.frame}\NormalTok{(DATA)}
+\KeywordTok{head}\NormalTok{(DATA)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   day Time Plot plot_mass_g
+## 1   0   T0   C1     50.6300
+## 2   0   T0   C2     49.7450
+## 3   0   T0   L1     49.7350
+## 4   0   T0   L2     51.0350
+## 5  36   T1   C1     42.7625
+## 6  36   T1   C2     43.0850
+\end{verbatim}
+
+Now we define our x, our y and the sequence for our fitting
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x<-DATA}\OperatorTok{$}\NormalTok{day}
+\NormalTok{y<-DATA}\OperatorTok{$}\NormalTok{plot_mass_g}
+\NormalTok{xx <-}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{400}\NormalTok{, }\DataTypeTok{length=}\DecValTok{800}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Next is the fitting itself. Again, we take 50g as the basis from which
+decomposition starts.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fit <-}\StringTok{ }\KeywordTok{nls}\NormalTok{(y }\OperatorTok{~}\StringTok{ }\NormalTok{(}\DecValTok{50} \OperatorTok{*}\StringTok{ }\KeywordTok{exp}\NormalTok{(}\OperatorTok{-}\NormalTok{k }\OperatorTok{*}\StringTok{ }\NormalTok{x)), }\DataTypeTok{start=}\KeywordTok{list}\NormalTok{(}\DataTypeTok{k=}\FloatTok{0.00001}\NormalTok{))}
+\KeywordTok{summary}\NormalTok{(fit)}
+\end{Highlighting}
+\end{Shaded}
+
+To have it handy later, we are saving our k of the fit
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{k<-}\FloatTok{0.0048034}
+\end{Highlighting}
+\end{Shaded}
+
+You can now do the simple plot like this, but I will not show it here:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# plot(x,y)}
+\CommentTok{# lines(xx, predict(fit, data.frame(x=xx)), col="red", lwd=2, lty=1)}
+\end{Highlighting}
+\end{Shaded}
+
+Instead, let's do it with ggplot:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{func1<-func1<-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x) \{}\DecValTok{50} \OperatorTok{*}\StringTok{ }\KeywordTok{exp}\NormalTok{(}\OperatorTok{-}\NormalTok{k }\OperatorTok{*}\StringTok{ }\NormalTok{x)\}}
+
+\NormalTok{g1 <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(,}\KeywordTok{aes}\NormalTok{(x,y)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlim}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{400}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylim}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{60}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{show.legend =} \OtherTok{FALSE}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Leaf mass decline on all plots"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"days"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"remaining mass in g"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{stat_function}\NormalTok{(}\DataTypeTok{fun =}\NormalTok{ func1, }\DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{400}\NormalTok{), }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{) }
+\NormalTok{g1}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{report-oilpalm_files/figure-latex/ch6-1.pdf}
+
+This looks nice alreay, but to give a more common representation, let's
+make it a line that includes the plot means and standard errors for each
+month:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{DATA<-DATA}\OperatorTok{%>%}\KeywordTok{group_by}\NormalTok{(day,Time)}\OperatorTok{%>%}\KeywordTok{summarize}\NormalTok{(}\DataTypeTok{mean_mass_g =} \KeywordTok{mean}\NormalTok{(plot_mass_g), }\DataTypeTok{se_g =} \KeywordTok{sd}\NormalTok{(plot_mass_g}\OperatorTok{/}\KeywordTok{sqrt}\NormalTok{(}\DecValTok{4}\NormalTok{)))}
+\KeywordTok{head}\NormalTok{(DATA)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 4
+## # Groups:   day [6]
+##     day Time  mean_mass_g  se_g
+##   <int> <fct>       <dbl> <dbl>
+## 1     0 T0           50.3 0.326
+## 2    36 T1           43.3 0.274
+## 3    66 T2           35.9 0.780
+## 4    99 T3           32.3 0.503
+## 5   125 T4           29.9 0.537
+## 6   157 T5           26.1 0.697
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x<-DATA}\OperatorTok{$}\NormalTok{day}
+\NormalTok{y<-DATA}\OperatorTok{$}\NormalTok{mean_mass_g}
+\NormalTok{z<-DATA}\OperatorTok{$}\NormalTok{se_g }\CommentTok{# for error visability}
+
+\KeywordTok{library}\NormalTok{(sciplot)}
+
+\NormalTok{g2 <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(,}\KeywordTok{aes}\NormalTok{(x,y)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlim}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{400}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylim}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{60}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_line}\NormalTok{(}\DataTypeTok{show.legend =} \OtherTok{FALSE}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ggtitle}\NormalTok{(}\StringTok{"Leaf mass decline for area"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{xlab}\NormalTok{(}\StringTok{"days"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylab}\NormalTok{(}\StringTok{"remaining mass in g"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{stat_function}\NormalTok{(}\DataTypeTok{fun =}\NormalTok{ func1, }\DataTypeTok{xlim=}\KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{400}\NormalTok{), }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{)  }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_errorbar}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{ymin=}\NormalTok{y}\OperatorTok{-}\NormalTok{z, }\DataTypeTok{ymax=}\NormalTok{y}\OperatorTok{+}\NormalTok{z), }\DataTypeTok{colour=}\StringTok{"black"}\NormalTok{, }\DataTypeTok{width=}\NormalTok{.}\DecValTok{1}\NormalTok{) }
+\NormalTok{g2}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{report-oilpalm_files/figure-latex/ch7-1.pdf}
+
+\end{document}

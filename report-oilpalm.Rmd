@@ -5,6 +5,12 @@ date: "8 November 2019"
 output: github_document
 ---
 
+```{r include = F}
+knitr::opts_chunk$set(warning = F)
+knitr::opts_chunk$set(message = F)
+```
+
+
 ### Background
 In the following course, we are looking at two processes in oil palm plantations:
 1) Soil organic carbon (SOC) remaining after deforestation and 2) Decomposition of oil palm leafs
@@ -56,6 +62,29 @@ lines(xx, predict(fit2, data.frame(x=xx)), col="red", lwd=2, lty=1)
 summary(fit2)
 ```
 
+This is a nice summary, but how do we extract k, for example?
+```{r extracting K, echo = T}
+summary(fit2)$coefficients
+k <- summary(fit2)$coefficients[2,1]
+k
+```
+
+#### Calculating turnover time
+
+k can be though of as the fraction of organic carbon that is lost every year. 
+We can therefore calculate turnover time by 1/k. 1 is the whole of the carbon at
+the beginning so how many k's (fractions per year) do we need to lose until everything
+is gone/turned over?
+
+```{r calculating turnover time}
+turnover_time <-  1/k
+turnover_time
+print(paste0("Our turnover time is: ",round(turnover_time,2)," years"))
+
+```
+
+
+
 The plot will look much nicer in ggplot2, however:
 ```{r nicer-plotting, echo = T}
 g2 <- ggplot(DATA,aes(t,soc_pc, shape = Country, colour = Country)) +
@@ -79,6 +108,10 @@ g2 +
   stat_function(fun = func3, xlim=c(0,400), col = "blue", size = 1) 
 ```
 
+
+#### Exercise (to be added to course folder):
+
+Add your name and the turnover time into the plot using annotate(). Create a PDF file including your plot and the code you used. Add this to the course folder.
 
 
 
