@@ -101,7 +101,7 @@ ggsave("figs/carbon-plot-2020.png", plot = myplot2, width = 15, height = 7, unit
 # ??ggsave if you need help
 
 
-#### PT 2 Marcus ####
+#### PT 2 Marcus prep: ####
 library(tidyverse)
 d <- read.csv("data/leaf-decomp-data-test.csv")
 names(d)
@@ -139,7 +139,7 @@ decay_line <- function(x){start_val * 2.718^(-k * x)}
 p1 + stat_function(fun = decay_line) +
   annotate("text", label = plot_choice, x = 50, y = 10)
 
-#### now as function overall ####  
+#### PT 2 Marcus prep: now as function overall ####  
 
 my_own_function <- function(plot_choice){
   d <- read.csv("data/leaf-decomp-data-test.csv")
