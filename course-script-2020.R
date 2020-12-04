@@ -1,3 +1,4 @@
+#### PT 1 ####
 #### loading important libraries ####
 # install.packages("tidyverse") # only needs to be done once
 library("tidyverse") # loads the package for your session
@@ -98,4 +99,81 @@ myplot2
 
 ggsave("figs/carbon-plot-2020.png", plot = myplot2, width = 15, height = 7, units = "cm")
 # ??ggsave if you need help
+
+
+#### PT 2 Marcus ####
+library(tidyverse)
+d <- read.csv("data/leaf-decomp-data-test.csv")
+names(d)
+head(d)
+
+unique(d$Plot)
+
+plot_choice = "C1"
+
+d <- d %>% mutate(mass = Mass_g) %>% filter(Plot == plot_choice) %>% 
+  select(day, Plot, mass)
+  
+head(d)
+qplot(d$day, d$mass)
+
+start_val <- mean(d$mass[d$day == 0])
+start_val
+
+x <- d$day
+y <- d$mass
+
+fit <- nls(y ~ start_val * 2.718^(-k * x), start=list(k=0.0001))
+summary(fit)
+
+k <- summary(fit)$coefficients[1]
+k
+
+p1 <- ggplot() +
+  geom_point(aes(x,y)) +
+  theme_bw()
+p1
+
+decay_line <- function(x){start_val * 2.718^(-k * x)}
+
+p1 + stat_function(fun = decay_line) +
+  annotate("text", label = plot_choice, x = 50, y = 10)
+
+#### now as function overall ####  
+
+my_own_function <- function(plot_choice){
+  d <- read.csv("data/leaf-decomp-data-test.csv")
+  d <- d %>% mutate(mass = Mass_g) %>% filter(Plot == plot_choice) %>% 
+    select(day, Plot, mass)
+  
+  head(d)
+  qplot(d$day, d$mass)
+  
+  start_val <- mean(d$mass[d$day == 0])
+  start_val
+  
+  x <- d$day
+  y <- d$mass
+  
+  fit <- nls(y ~ start_val * 2.718^(-k * x), start=list(k=0.0001))
+  summary(fit)
+  
+  k <- summary(fit)$coefficients[1]
+  k
+  
+  p1 <- ggplot() +
+    geom_point(aes(x,y)) +
+    theme_bw()
+  p1
+  
+  decay_line <- function(x){start_val * 2.718^(-k * x)}
+  
+  p1 + stat_function(fun = decay_line) +
+    annotate("text", label = plot_choice, x = 50, y = 10)
+}
+
+my_own_function("C1")
+
+
+
 
