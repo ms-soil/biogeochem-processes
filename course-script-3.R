@@ -130,12 +130,12 @@ ggsave("figs/all-decompositions.png", plot = all_together,
 
 library(tidyverse)
 # read in data again
-d <- read.csv("data/leaf-decomp-data-3.csv", h = T)
-d
+d_raw <- read.csv("data/leaf-decomp-data-3.csv", h = T)
+d_raw
 
-names(d)
+names(d_raw)
 
-d_plotmeans <- d %>% group_by(day, Plot) %>% summarize(mass = mean(Mass_g))
+d_plotmeans <- d_raw %>% group_by(day, Plot) %>% summarize(mass = mean(Mass_g))
 as_tibble(d_plotmeans)
 
 # shorten name
@@ -196,16 +196,18 @@ p1 +
   stat_function(fun = decay_curve_loam, col = "blue")
 
 
+#### with line and SE ####
 
+d_bars<-d_plotmeans%>%group_by(day)%>%summarize(mean_mass = mean(mass), se = sd(mass/sqrt(4)))
+head(d_bars)
 
+g2 <- ggplot(d_bars, aes(day, mean_mass)) +
+  geom_line()
 
+g2
 
-
-
-
-
-
-
+g2 + 
+  geom_errorbar(aes(ymin=mean_mass-se, ymax=mean_mass+se), colour="black", width=.1) 
 
 
 
