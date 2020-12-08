@@ -49,7 +49,7 @@ decay_curve <- function(x){start_val * e^(-k * x)}
 # add decay curve to plot
 
 p1 + stat_function(fun = decay_curve) +
-  annotate("text", x = 300, y = 45, label = plot_choice, size = 10) +
+  annotate("text", x = 300, yo = 45, label = plot_choice, size = 10) +
   annotate("text", label = 
              paste0("y = ",start_val, "* e ^ (-",k," *x)"), x = 120, y = 5) +
   xlab("days") +
@@ -122,6 +122,90 @@ all_together
 
 ggsave("figs/all-decompositions.png", plot = all_together,
        width = 20, height = 20, units = "cm")
+
+########
+########
+
+#### prep for Wed Dec 12, 2020 ####
+
+library(tidyverse)
+# read in data again
+d <- read.csv("data/leaf-decomp-data-3.csv", h = T)
+d
+
+names(d)
+
+d_plotmeans <- d %>% group_by(day, Plot) %>% summarize(mass = mean(Mass_g))
+as_tibble(d_plotmeans)
+
+# shorten name
+d <- d_plotmeans
+names(d)
+
+d <- d %>% mutate(
+  soiltype = ifelse(str_detect(Plot, "C") == T, "Clay Acrisol", "Loam Acrisol" ))
+
+qplot(d$day, d$mass, col = d$soiltype)
+
+
+# divide into clay and loam for fitting
+d_clay <- d %>% filter(soiltype == "Clay Acrisol")
+unique(d_clay$soiltype)
+
+d_loam<- d %>% filter(soiltype == "Loam Acrisol")
+unique(d_loam$soiltype)
+
+# fitting clay
+start_val_clay <- mean(d_clay$mass[d_clay$day == 0]) # getting mean of day 0
+start_val_clay
+
+x <- d_clay$day
+y <- d_clay$mass
+
+fit_clay <- nls(y ~ start_val_clay * 2.718^(-k * x), start=list(k = 0.05))
+k_clay <- summary(fit_clay)$coefficients[1]
+k_clay <- round(k_clay, 5)
+k_clay
+
+e <- 2.718
+decay_curve_clay <- function(x){start_val_clay * e^(-k_clay * x)}
+
+# fitting loam
+start_val_loam <- mean(d_loam$mass[d_loam$day == 0]) # getting mean of day 0
+start_val_loam
+
+x <- d_loam$day
+y <- d_loam$mass
+
+fit_loam <- nls(y ~ start_val_loam * 2.718^(-k * x), start=list(k = 0.05))
+k_loam <- summary(fit_loam)$coefficients[1]
+k_loam <- round(k_loam, 5)
+k_loam
+
+decay_curve_loam <- function(x){start_val_loam * e^(-k_loam * x)}
+
+#### plotting with two curves
+
+p1 <- ggplot(data = d, aes(day,mass, col = soiltype)) +
+  geom_point() +
+  theme_bw()
+p1
+
+p1 +
+  stat_function(fun = decay_curve_clay, col = "red") +
+  stat_function(fun = decay_curve_loam, col = "blue")
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
