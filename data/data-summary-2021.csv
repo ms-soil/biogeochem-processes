@@ -1,0 +1,22 @@
+land use,replicate,bulk density,SOC,total N,Effective cation exchange capacity,CO2 fluxes,N2O fluxes,CH4 fluxes,soil temp,WFPS
+ ,,g/cm3,g C/m2,g N/m2,mmol charge/kg,mg C/m2/day,ugN/m2/day,ug C/m2/day,øC,
+Cropland agroforestry - crop row,AFc1,1.2,709,77,1171,29.6,109.8,-2.2,14.9,34
+Cropland agroforestry - crop row,AFc2,1.6,689,77,1250,39.0,20.1,-23.3,15.1,37
+Cropland agroforestry - crop row,AFc3,1.4,770,82,1228,42.8,24.8,-2.7,15.4,37
+Cropland agroforestry - crop row,AFc4,1.1,796,87,1242,52.0,156.5,-5.6,15.2,41
+Cropland agroforestry - crop row,AFc5,1.1,928,97,1093,40.9,92.1,-13.4,14.9,52
+Cropland agroforestry - tree row,AFt1,1.2,755,66,1173,84.5,2.4,-11.0,14.9,31
+Cropland agroforestry - tree row,AFt2,1.3,780,77,1234,67.3,0.8,-12.4,15.0,28
+Cropland agroforestry - tree row,AFt3,1.5,984,92,1248,81.5,-6.2,-3.8,14.2,29
+Cropland agroforestry - tree row,AFt4,1.2,954,92,1160,93.6,6.1,-12.1,14.2,30
+Cropland agroforestry - tree row,AFt5,1.1,1020,102,1144,91.7,3.2,-4.9,14.3,39
+Forest-upper slope,Fu1,1.1,1295,77,283,144.1,5.7,-37.8,13.2,16
+Forest-upper slope,Fu2,0.9,1479,97,209,99.1,-2.2,-30.6,13.1,18
+Forest-upper slope,Fu3,1.1,1714,87,199,145.5,1.0,-37.8,13.3,23
+Forest-upper slope,Fu4,1.0,1652,87,259,103.6,-1.0,-38.2,13.5,19
+Forest-upper slope,Fu5,0.9,1137,66,205,82.7,8.1,-42.0,13.3,17
+Forest-lower slope,Fl1,1.3,1178,77,256,91.3,6.7,-174.1,13.8,13
+Forest-lower slope,Fl2,1.2,1000,61,211,155.3,0.0,-68.5,13.4,16
+Forest-lower slope,Fl3,1.1,836,51,196,116.3,4.9,-34.4,13.8,14
+Forest-lower slope,Fl4,0.8,1112,71,285,115.2,4.5,-58.5,13.4,22
+Forest-lower slope,Fl5,0.8,1505,82,171,123.4,-0.1,-62.5,13.4,20
