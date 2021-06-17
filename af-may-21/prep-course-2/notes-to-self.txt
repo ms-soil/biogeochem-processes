@@ -1,0 +1,17 @@
+-------
+first part
+
+- add a ggplot
+- do stats
+- add stats to plot
+
+-------
+second part - decomposition
+
+- clean up data
+- illustrate data
+- do stats (maybe)
+- discuss 
+
+
+
